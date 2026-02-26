@@ -4,7 +4,7 @@ blueprint:
   domain: automation
   input:
     target_device:
-      name: Sunny Desk Remote
+      name: Button
       selector:
         device:
           integration: smartthings
@@ -57,11 +57,18 @@ blueprint:
       default: []
       selector: {action: {}}
 
+variables:
+  # Captures the internal Home Assistant Device ID from the UI dropdown
+  selected_ha_device: !input target_device
+
 trigger:
   - platform: event
     event_type: smartthings.button
-    event_data:
-      device_id: !input target_device
+
+condition:
+  - condition: template
+    # Extracts the SmartThings UUID from the device registry and matches it against the incoming event
+    value_template: "{{ trigger.event.data.device_id in device_attr(selected_ha_device, 'identifiers') | string }}"
 
 action:
   - choose:
