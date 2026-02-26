@@ -60,10 +60,8 @@ blueprint:
 trigger:
   - platform: event
     event_type: smartthings.button
-
-condition:
-  - condition: template
-    value_template: "{{ trigger.event.data.device_id == inputs.target_device }}"
+    event_data:
+      device_id: !input target_device
 
 action:
   - choose:
