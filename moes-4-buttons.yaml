@@ -3,25 +3,57 @@ blueprint:
   description: Handle events for the 4-button remote.
   domain: automation
   input:
-    button_device:
-      name: Device
+    target_device:
+      name: Sunny Desk Remote
       selector:
         device:
           integration: smartthings
-    button_1_action:
-      name: Button 1 (Main) Action
+    main_pushed:
+      name: Main Button - Pushed
       default: []
       selector: {action: {}}
-    button_2_action:
-      name: Button 2 Action
+    main_double:
+      name: Main Button - Double
       default: []
       selector: {action: {}}
-    button_3_action:
-      name: Button 3 Action
+    main_held:
+      name: Main Button - Held
       default: []
       selector: {action: {}}
-    button_4_action:
-      name: Button 4 Action
+    btn2_pushed:
+      name: Button 2 - Pushed
+      default: []
+      selector: {action: {}}
+    btn2_double:
+      name: Button 2 - Double
+      default: []
+      selector: {action: {}}
+    btn2_held:
+      name: Button 2 - Held
+      default: []
+      selector: {action: {}}
+    btn3_pushed:
+      name: Button 3 - Pushed
+      default: []
+      selector: {action: {}}
+    btn3_double:
+      name: Button 3 - Double
+      default: []
+      selector: {action: {}}
+    btn3_held:
+      name: Button 3 - Held
+      default: []
+      selector: {action: {}}
+    btn4_pushed:
+      name: Button 4 - Pushed
+      default: []
+      selector: {action: {}}
+    btn4_double:
+      name: Button 4 - Double
+      default: []
+      selector: {action: {}}
+    btn4_held:
+      name: Button 4 - Held
       default: []
       selector: {action: {}}
 
@@ -31,15 +63,43 @@ trigger:
 
 condition:
   - condition: template
-    value_template: "{{ trigger.event.data.device_id == inputs.button_device }}"
+    value_template: "{{ trigger.event.data.device_id == inputs.target_device }}"
 
 action:
   - choose:
       - conditions: "{{ trigger.event.data.component_id == 'main' }}"
-        sequence: !input button_1_action
+        sequence:
+          - choose:
+              - conditions: "{{ trigger.event.data.value == 'pushed' }}"
+                sequence: !input main_pushed
+              - conditions: "{{ trigger.event.data.value == 'double' }}"
+                sequence: !input main_double
+              - conditions: "{{ trigger.event.data.value == 'held' }}"
+                sequence: !input main_held
       - conditions: "{{ trigger.event.data.component_id == 'button2' }}"
-        sequence: !input button_2_action
+        sequence:
+          - choose:
+              - conditions: "{{ trigger.event.data.value == 'pushed' }}"
+                sequence: !input btn2_pushed
+              - conditions: "{{ trigger.event.data.value == 'double' }}"
+                sequence: !input btn2_double
+              - conditions: "{{ trigger.event.data.value == 'held' }}"
+                sequence: !input btn2_held
       - conditions: "{{ trigger.event.data.component_id == 'button3' }}"
-        sequence: !input button_3_action
+        sequence:
+          - choose:
+              - conditions: "{{ trigger.event.data.value == 'pushed' }}"
+                sequence: !input btn3_pushed
+              - conditions: "{{ trigger.event.data.value == 'double' }}"
+                sequence: !input btn3_double
+              - conditions: "{{ trigger.event.data.value == 'held' }}"
+                sequence: !input btn3_held
       - conditions: "{{ trigger.event.data.component_id == 'button4' }}"
-        sequence: !input button_4_action
+        sequence:
+          - choose:
+              - conditions: "{{ trigger.event.data.value == 'pushed' }}"
+                sequence: !input btn4_pushed
+              - conditions: "{{ trigger.event.data.value == 'double' }}"
+                sequence: !input btn4_double
+              - conditions: "{{ trigger.event.data.value == 'held' }}"
+                sequence: !input btn4_held
